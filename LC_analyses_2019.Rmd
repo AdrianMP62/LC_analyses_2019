@@ -19,15 +19,11 @@ knitr::opts_chunk$set(out.width='1.0\\linewidth')
 options(scipen=999)
 ```
 
-
-```{r}
-RUBBISH
-```
-
-
-
 ```{r}
 library(ggplot2)
+library(gridExtra)
+library(grid)
+library(lattice)
 ```
 
 ####Data are remote sensed water presence data including variables inha (inundated hectares) and naha (not assessable hectares - where there are blank lines across the wetland polygon). These naha areas are only added to the inha (to give a new column comha) where they are entirely across inha areas. Where they span both inha and dry areas they are not used. Code below creates files for each wetland polygon for assessment (outside R) of which dates to use the naha data.
@@ -43,6 +39,44 @@ Rainfall.Carn$Date <- as.Date(Rainfall.Carn$Date, "%d/%m/%Y")
 Rainfall.Pren <- read.csv("Prenti rainfall.csv")
 Rainfall.Pren$Date <- as.Date(Rainfall.Pren$Date, "%d/%m/%Y")
 ```
+
+```{r}
+#combined Carnegie, Prenti and Wongawol rainfall - graphs and correlations
+Comb_Rain <- read.csv("Combined rainfall.csv")
+Comb_Rain$Date <- as.Date(Comb_Rain$Date, "%d/%m/%Y")
+
+#create 3 ggplots - one for each rainfall station
+RC <- ggplot () +
+  geom_line(data = Comb_Rain, aes(x = Date, y = Carnegie.Rainfall), color = "blue", size = 0.5) + ylim(0,120) + theme(axis.title.x = element_blank())
+RP <- ggplot () +
+  geom_line(data = Comb_Rain, aes(x = Date, y = Prenti.Rainfall), color = "red", size = 0.5) + ylim(0,120) + theme(axis.title.x = element_blank())
+RW <- ggplot () +
+  geom_line(data = Comb_Rain, aes(x = Date, y = Wongawol.Rainfall), color = "green", size = 0.5) + ylim(0,120)
+#arrange all three plots together
+grid.arrange(RC, RP, RW, ncol=1)
+
+#omit dates with NA values for any station
+Comb_Rain_3val <- na.omit(Comb_Rain)
+#calculate spearman correlations
+cor(Comb_Rain_3val$Carnegie.Rainfall, Comb_Rain_3val$Prenti.Rainfall, method = "spearman")
+cor(Comb_Rain_3val$Prenti.Rainfall, Comb_Rain_3val$Wongawol.Rainfall, method = "spearman")
+cor(Comb_Rain_3val$Carnegie.Rainfall, Comb_Rain_3val$Wongawol.Rainfall, method = "spearman")
+```
+
+```{r}
+par(mar = c(5,5,2,5))
+with(Data_P4, plot(date, inha, type="l", col="red3", lwd=2,
+             ylab=expression("inudated hectares")),
+             ylim=c(0,200))
+
+par(new = T)
+with(Rainfall.Carn, plot(Date, Rainfall, type="l", col = rgb(0,0.6,0.2, alpha=0.5), axes=F, xlab=NA, ylab=NA, cex=1.2))
+axis(side = 4)
+mtext(side = 4, line = 3, 'Daily rainfall (mm)')
+
+
+
+
 
 ## Calculations and Graphs for central lake area
 ```{r}
@@ -76,14 +110,14 @@ ggplot () +
 double line plot with different axes using par and base R plot.
 ```{r}
 par(mar = c(5,5,2,5))
-with(Data_MLC2, plot(date, comha, type="l", col="red3", lwd=2,
-             ylab=expression("inudated hectares")),
-             ylim=c(0,32000))
-
-par(new = T)
-with(Rainfall.Carn, plot(Date, Rainfall, type="l", col = rgb(0,0.6,0.2, alpha=0.5), axes=F, xlab=NA, ylab=NA, cex=1.2))
+with(Rainfall.Carn, plot(Date, Rainfall, type="l", col = "dark green", axes=F, xlab=NA, ylab=NA, cex=0.8))
 axis(side = 4)
 mtext(side = 4, line = 3, 'Daily rainfall (mm)')
+
+par(new = T)
+with(Data_MLC2, plot(date, comha, type="l", col= rgb(1,0,0, alpha=0.5), lwd=2,
+             ylab=expression("inudated hectares")),
+             ylim=c(0,32000))
 ```
 
 ## Calculations and Graphs Peripheral wetland 3
