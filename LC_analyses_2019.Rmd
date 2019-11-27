@@ -19,6 +19,13 @@ knitr::opts_chunk$set(out.width='1.0\\linewidth')
 options(scipen=999)
 ```
 
+
+```{r}
+RUBBISH
+```
+
+
+
 ```{r}
 library(ggplot2)
 ```
@@ -113,11 +120,6 @@ with(Rainfall.Pren, plot(Date, Rainfall, type="l", col = rgb(0,0.6,0.2, alpha=0.
 axis(side = 4)
 mtext(side = 4, line = 3, 'Daily rainfall (mm)')
 ```
-
-```{r}
-adkjfhahehfg
-```
-
 
 ## Calculations and Graphs Peripheral wetland 4
 ```{r} 
