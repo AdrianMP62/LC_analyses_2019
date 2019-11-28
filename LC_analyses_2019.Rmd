@@ -28,6 +28,8 @@ library(lattice)
 
 ####Data are remote sensed water presence data including variables inha (inundated hectares) and naha (not assessable hectares - where there are blank lines across the wetland polygon). These naha areas are only added to the inha (to give a new column comha) where they are entirely across inha areas. Where they span both inha and dry areas they are not used. Code below creates files for each wetland polygon for assessment (outside R) of which dates to use the naha data. Rainfall data is from Bureau of meteorology
 
+###Read in inundation and rainfall data
+
 ```{r}
 #read the raw inundation data for all wetland polygons from Bart Huntley (DBCA Remote Sensing and Spatial Analysis).
 Data <- read.csv("Carnegie inundation data.csv")
@@ -39,6 +41,8 @@ Rainfall.Pren <- read.csv("Prenti rainfall.csv")
 Rainfall.Pren$Date <- as.Date(Rainfall.Pren$Date, "%d/%m/%Y")
 ```
 
+
+### Produce rainfall plots
 ```{r}
 #combined Carnegie, Prenti and Wongawol rainfall - graphs and correlations
 Comb_Rain <- read.csv("Combined rainfall.csv")
@@ -55,7 +59,7 @@ RW <- ggplot () +
 grid.arrange(RC, RP, RW, ncol=1)
 ```
 
-
+### Undertake correlations between rainfall stations
 ```{r}
 #Spearman correlations
 #omit dates with NA values for any station
@@ -66,7 +70,7 @@ cor(Comb_Rain_3val$Prenti.Rainfall, Comb_Rain_3val$Wongawol.Rainfall, method = "
 cor(Comb_Rain_3val$Carnegie.Rainfall, Comb_Rain_3val$Wongawol.Rainfall, method = "spearman")
 ```
 
-## Calculations and Graphs for central lake area
+### Calculations and Graphs for central lake area
 ```{r}
 #extract main lake central data
 Data_MLC <- Data[Data$site == "Main Lake Central", ]
@@ -102,7 +106,7 @@ with(Data_MLC, plot(date, comha, type="l", col= rgb(1,0,0, alpha=0.5), lwd=2,
              ylim=c(0,32000))
 ```
 
-## Calculations and Graphs Peripheral wetland 3
+### Calculations and Graphs Peripheral wetland 3
 ```{r}
 #extract main lake central data
 Data_P3 <- Data[Data$site == "Peripheral 3", ]
@@ -132,7 +136,7 @@ axis(side = 4)
 mtext(side = 4, line = 3, 'Daily rainfall (mm)')
 ```
 
-## Calculations and Graphs Peripheral wetland 4
+### Calculations and Graphs Peripheral wetland 4
 ```{r} 
 #extract Peripheral wetland 4 data
 #since no occasions on which we would add in the naha data, the original inha data is used
