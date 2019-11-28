@@ -26,7 +26,7 @@ library(grid)
 library(lattice)
 ```
 
-####Data are remote sensed water presence data including variables inha (inundated hectares) and naha (not assessable hectares - where there are blank lines across the wetland polygon). These naha areas are only added to the inha (to give a new column comha) where they are entirely across inha areas. Where they span both inha and dry areas they are not used. Code below creates files for each wetland polygon for assessment (outside R) of which dates to use the naha data.
+####Data are remote sensed water presence data including variables inha (inundated hectares) and naha (not assessable hectares - where there are blank lines across the wetland polygon). These naha areas are only added to the inha (to give a new column comha) where they are entirely across inha areas. Where they span both inha and dry areas they are not used. Code below creates files for each wetland polygon for assessment (outside R) of which dates to use the naha data. Rainfall data is from Bureau of meteorology
 
 ```{r}
 #read the raw inundation data for all wetland polygons from Bart Huntley (DBCA Remote Sensing and Spatial Analysis).
