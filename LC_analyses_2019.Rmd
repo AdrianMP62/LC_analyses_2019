@@ -79,11 +79,11 @@ Data_MLC$propnaha <- Data_MLC$naha/Data_MLC$inha*100
 Data_MLC$date <- as.Date(Data_MLC$date, "%Y-%m-%d")
 Data_MLC$nahause <- Data_MLC$naha
 Data_MLC$naha_include <- "no"
-write.csv(Data_MLC, "Data.MLC.csv")
+write.csv(Data_MLC, "Data_MLC.csv")
 #change naha_include to 'yes' for selected dates
 Data_MLC$naha_include[Data_MLC$date %in% as.Date(c("07/01/2006","04/03/2009","10/03/2011","26/03/2011","11/04/2011","29/05/2011","14/06/2011","16/07/2011","01/08/2011","17/08/2011","25/08/2011","02/09/2011","18/09/2011","26/09/2011","05/11/2011","13/11/2011","15/03/2013","31/03/2013","16/04/2013","02/03/2014","19/04/2014"), "%d/%m/%Y")] <- "yes"
 Data_MLC$nahause[Data_MLC$naha_include == "no"] <- 0
-Data_MLC$comha <- Data_MLC$inha + Data_MLC$naha
+Data_MLC$comha <- Data_MLC$inha + Data_MLC$nahause
 ```
 
 double line plot with rainfall x 150 so can see on same scale as inundated hectares
