@@ -3,8 +3,8 @@ title: "Carnegie inundation"
 author: "Adrian Pinder"
 date: "22/11/2019"
 output:
-  html_document:
-    df_print: paged
+  html_document: 
+    toc: yes
 editor_options:
   chunk_output_type: console
 ---
@@ -91,8 +91,8 @@ Data_MLC$comha <- Data_MLC$inha + Data_MLC$nahause
 double line plot with rainfall x 150 so can see on same scale as inundated hectares
 ```{r}
 ggplot () +
-  geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) +
-  geom_line(data = Rainfall.Carn, aes(x = Date, y = Rainfall*150), color = "red", size = 1, alpha=0.5)
+  geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) #+
+  #geom_line(data = Rainfall.Carn, aes(x = Date, y = Rainfall*150), color = "red", size = 1, alpha=0.5)
 ```
 
 double line plot with different axes using par and base R plot.
@@ -158,5 +158,20 @@ with(Rainfall.Carn, plot(Date, Rainfall, type="l", col = rgb(0,0.6,0.2, alpha=0.
 axis(side = 4)
 mtext(side = 4, line = 3, 'Daily rainfall (mm)')
 ```
+
+#create grid of three inundation plots
+```{r}
+
+#create 3 ggplots - one for each rainfall station
+MLC <- ggplot () +
+  geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("Area Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Central area of main lake") + theme(plot.title = element_text(size = 9))
+P3 <- ggplot () +
+  geom_line(data = Data_P3, aes(x = date, y = comha), color = "red", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("Area Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9))+ labs(title = "Peripheral wetland 3") + theme(plot.title = element_text(size = 9))
+P4 <- ggplot () +
+  geom_line(data = Data_P4, aes(x = date, y = inha), color = "green", size = 0.5) + ylab("Area Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Peripheral wetland 4 on dune") + theme(plot.title = element_text(size = 9))
+#arrange all three plots together
+grid.arrange(MLC, P3, P4, ncol=1)
+```
+
 
 
