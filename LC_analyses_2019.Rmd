@@ -2,8 +2,10 @@
 title: "Carnegie inundation"
 author: "Adrian Pinder"
 date: "22/11/2019"
-output: pdf_document
-editor_options: 
+output:
+  html_document:
+    df_print: paged
+editor_options:
   chunk_output_type: console
 ---
 
