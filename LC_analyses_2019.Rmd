@@ -162,7 +162,7 @@ mtext(side = 4, line = 3, 'Daily rainfall (mm)')
 #create grid of three inundation plots
 ```{r}
 
-#create 3 ggplots - one for each rainfall station
+#create 3 ggplots - one for each rainfall station and then print using grid.arrange
 MLC <- ggplot () +
   geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("Area Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Central area of main lake") + theme(plot.title = element_text(size = 9))
 P3 <- ggplot () +
