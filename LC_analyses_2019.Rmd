@@ -108,6 +108,46 @@ with(Data_MLC, plot(date, comha, type="l", col= rgb(1,0,0, alpha=0.5), lwd=2,
              ylim=c(0,32000))
 ```
 
+### Calculations and Graphs for west lake area
+```{r}
+#extract main lake central data
+Data_MLW <- Data[Data$site == "Main Lake West", ]
+#work out proportion of naha against inundated ha for examining 
+Data_MLW$propnaha <- Data_MLW$naha/Data_MLW$inha*100
+Data_MLW$date <- as.Date(Data_MLW$date, "%Y-%m-%d")
+Data_MLW$nahause <- Data_MLW$naha
+Data_MLW$naha_include <- "no"
+write.csv(Data_MLW, "Data_MLW.csv")
+#change naha_include to 'yes' for selected dates
+Data_MLW$naha_include[Data_MLW$date %in% as.Date(c("15/03/2013","11/04/2011","26/03/2011","10/03/2011","04/03/2009"), "%d/%m/%Y")] <- "yes"
+Data_MLW$nahause[Data_MLW$naha_include == "no"] <- 0
+Data_MLW$comha <- Data_MLW$inha + Data_MLW$nahause
+```
+
+double line plot with rainfall x 150 so can see on same scale as inundated hectares
+```{r}
+ggplot () +
+  geom_line(data = Data_MLW, aes(x = date, y = comha), color = "blue", size = 0.5) +
+  geom_line(data = Rainfall.Carn, aes(x = Date, y = Rainfall*150), color = "red", size = 1, alpha=0.5)
+```
+
+double line plot with different axes using par and base R plot.
+```{r}
+par(mar = c(5,5,2,5))
+with(Rainfall.Carn, plot(Date, Rainfall, type="l", col = "dark green", axes=F, xlab=NA, ylab=NA, cex=0.8))
+axis(side = 4)
+mtext(side = 4, line = 3, 'Daily rainfall (mm)')
+
+par(new = T)
+with(Data_MLW, plot(date, comha, type="l", col= rgb(1,0,0, alpha=0.5), lwd=2,
+             ylab=expression("inudated hectares")),
+             ylim=c(0,32000))
+```
+
+
+
+
+
 ### Calculations and Graphs Peripheral wetland 3
 ```{r}
 #extract main lake central data
@@ -165,12 +205,14 @@ mtext(side = 4, line = 3, 'Daily rainfall (mm)')
 #create 3 ggplots - one for each rainfall station and then print using grid.arrange
 MLC <- ggplot () +
   geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("Area Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Central area of main lake") + theme(plot.title = element_text(size = 9))
+MLW <- ggplot () +
+  geom_line(data = Data_MLW, aes(x = date, y = comha), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("Area Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Western area of main lake") + theme(plot.title = element_text(size = 9))
 P3 <- ggplot () +
   geom_line(data = Data_P3, aes(x = date, y = comha), color = "red", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("Area Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9))+ labs(title = "Peripheral wetland 3") + theme(plot.title = element_text(size = 9))
 P4 <- ggplot () +
   geom_line(data = Data_P4, aes(x = date, y = inha), color = "green", size = 0.5) + ylab("Area Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Peripheral wetland 4 on dune") + theme(plot.title = element_text(size = 9))
 #arrange all three plots together
-grid.arrange(MLC, P3, P4, ncol=1)
+grid.arrange(MLC, MLW, P3, P4, ncol=1)
 ```
 
 
