@@ -145,7 +145,21 @@ with(Data_MLW, plot(date, comha, type="l", col= rgb(1,0,0, alpha=0.5), lwd=2,
 ```
 
 
-
+### Calculations and Graphs for east lake area
+```{r}
+#extract main lake central data
+Data_MLE <- Data[Data$site == "Main Lake East", ]
+#work out proportion of naha against inundated ha for examining 
+Data_MLW$propnaha <- Data_MLE$naha/Data_MLE$inha*100
+Data_MLE$date <- as.Date(Data_MLE$date, "%Y-%m-%d")
+Data_MLE$nahause <- Data_MLE$naha
+Data_MLE$naha_include <- "no"
+write.csv(Data_MLE, "Data_MLE.csv")
+#change naha_include to 'yes' for selected dates
+Data_MLE$naha_include[Data_MLE$date %in% as.Date(c("15/03/2013","11/04/2011","26/03/2011","10/03/2011","04/03/2009"), "%d/%m/%Y")] <- "yes"
+Data_MLE$nahause[Data_MLE$naha_include == "no"] <- 0
+Data_MLE$comha <- Data_MLE$inha + Data_MLE$nahause
+```
 
 
 ### Calculations and Graphs Peripheral wetland 3
