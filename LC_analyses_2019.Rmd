@@ -86,6 +86,7 @@ write.csv(Data_MLC, "Data_MLC.csv")
 Data_MLC$naha_include[Data_MLC$date %in% as.Date(c("07/01/2006","04/03/2009","10/03/2011","26/03/2011","11/04/2011","29/05/2011","14/06/2011","16/07/2011","01/08/2011","17/08/2011","25/08/2011","02/09/2011","18/09/2011","26/09/2011","05/11/2011","13/11/2011","15/03/2013","31/03/2013","16/04/2013","02/03/2014","19/04/2014"), "%d/%m/%Y")] <- "yes"
 Data_MLC$nahause[Data_MLC$naha_include == "no"] <- 0
 Data_MLC$comha <- Data_MLC$inha + Data_MLC$nahause
+Data_MLC$propin <- Data_MLC$comha/32250.42*100
 ```
 
 double line plot with rainfall x 150 so can see on same scale as inundated hectares
@@ -110,7 +111,7 @@ with(Data_MLC, plot(date, comha, type="l", col= rgb(1,0,0, alpha=0.5), lwd=2,
 
 ### Calculations and Graphs for west lake area
 ```{r}
-#extract main lake central data
+#extract main lake west data
 Data_MLW <- Data[Data$site == "Main Lake West", ]
 #work out proportion of naha against inundated ha for examining 
 Data_MLW$propnaha <- Data_MLW$naha/Data_MLW$inha*100
@@ -122,6 +123,7 @@ write.csv(Data_MLW, "Data_MLW.csv")
 Data_MLW$naha_include[Data_MLW$date %in% as.Date(c("15/03/2013","11/04/2011","26/03/2011","10/03/2011","04/03/2009"), "%d/%m/%Y")] <- "yes"
 Data_MLW$nahause[Data_MLW$naha_include == "no"] <- 0
 Data_MLW$comha <- Data_MLW$inha + Data_MLW$nahause
+Data_MLW$propin <- Data_MLW$comha/63194.49*100
 ```
 
 double line plot with rainfall x 150 so can see on same scale as inundated hectares
@@ -144,27 +146,62 @@ with(Data_MLW, plot(date, comha, type="l", col= rgb(1,0,0, alpha=0.5), lwd=2,
              ylim=c(0,32000))
 ```
 
-
 ### Calculations and Graphs for east lake area
 ```{r}
-#extract main lake central data
+#extract main lake east data
 Data_MLE <- Data[Data$site == "Main Lake East", ]
 #work out proportion of naha against inundated ha for examining 
-Data_MLW$propnaha <- Data_MLE$naha/Data_MLE$inha*100
+Data_MLE$propnaha <- Data_MLE$naha/Data_MLE$inha*100
 Data_MLE$date <- as.Date(Data_MLE$date, "%Y-%m-%d")
 Data_MLE$nahause <- Data_MLE$naha
 Data_MLE$naha_include <- "no"
-write.csv(Data_MLE, "Data_MLE.csv")
-#change naha_include to 'yes' for selected dates
-Data_MLE$naha_include[Data_MLE$date %in% as.Date(c("15/03/2013","11/04/2011","26/03/2011","10/03/2011","04/03/2009"), "%d/%m/%Y")] <- "yes"
+#None of the naha data used because there is so much land area within the polygon
 Data_MLE$nahause[Data_MLE$naha_include == "no"] <- 0
 Data_MLE$comha <- Data_MLE$inha + Data_MLE$nahause
+Data_MLE$propin <- Data_MLE$comha/35199.99*100
 ```
+
+### Calculations and Graphs Peripheral wetland 1
+```{r}
+#extract data for peripheral wetland 1
+Data_P1 <- Data[Data$site == "Peripheral 1", ]
+#work out proportion of naha against inundated ha for examining 
+Data_P1$propnaha <- Data_P1$naha/Data_P1$inha*100
+Data_P1$date <- as.Date(Data_P1$date, "%Y-%m-%d")
+Data_P1$nahause <- Data_P1$naha
+Data_P1$naha_include <- "no"
+#change naha_include to 'yes' for selected dates
+Data_P1$naha_include[Data_P1$date %in% as.Date(c("17/08/2011","15/03/2013","26/03/2011","12/03/2012","11/04/2011","29/05/2011","4/03/2009","2/03/2014","9/02/2012","10/03/2011","1/08/2011","18/09/2011","19/01/2016","14/06/2011","16/07/2011","23/12/2011","2/09/2011","31/03/2013","5/11/2011","20/03/2009","25/02/2012"), "%d/%m/%Y")] <- "yes"
+Data_P1$nahause[Data_P1$naha_include == "no"] <- 0
+Data_P1$comha <- Data_P1$inha + Data_P1$naha
+Data_P1$propin <- Data_P1$comha/732.33*100
+```
+
+### Calculations and Graphs Peripheral wetland 2
+```{r}
+#extract data for peripheral wetland 2
+Data_P2 <- Data[Data$site == "Peripheral 2", ]
+#work out proportion of naha against inundated ha for examining 
+Data_P2$propnaha <- Data_P2$naha/Data_P2$inha*100
+Data_P2$date <- as.Date(Data_P2$date, "%Y-%m-%d")
+Data_P2$nahause <- Data_P2$naha
+Data_P2$naha_include <- "no"
+write.csv(Data_P2, "Data_P2.csv")
+#change naha_include to 'yes' for selected dates
+Data_P2$naha_include[Data_P2$date %in% as.Date(c("28/03/2006","13/04/2006","29/04/2006","15/05/2006","16/06/2006","2/07/2006","18/07/2006","3/08/2006","19/08/2006","20/09/2006","10/01/2007","10/03/2011","26/03/2011","11/04/2011","14/06/2011","1/08/2011","17/08/2011","18/09/2011","5/11/2011","7/12/2011","15/03/2013","31/03/2013","16/04/2013","19/06/2013","5/07/2013","6/08/2013","22/08/2013"), "%d/%m/%Y")] <- "yes"
+Data_P2$nahause[Data_P2$naha_include == "no"] <- 0
+Data_P2$comha <- Data_P2$inha + Data_P2$naha
+Data_P2$propin <- Data_P2$comha/38.52*100
+```
+
+
+
+
 
 
 ### Calculations and Graphs Peripheral wetland 3
 ```{r}
-#extract main lake central data
+#extract data for peripheral wetland 3
 Data_P3 <- Data[Data$site == "Peripheral 3", ]
 #work out proportion of naha against inundated ha for examining 
 Data_P3$propnaha <- Data_P3$naha/Data_P3$inha*100
@@ -177,6 +214,7 @@ write.csv(Data_P3, "Data_P3.csv")
 Data_P3$naha_include[Data_P3$date %in% as.Date(c("09/05/2004","26/06/2004","13/08/2004","29/08/2004","30/09/2004","13/04/2006","29/04/2006","15/05/2006","16/06/2006","02/07/2006","18/07/2006","03/08/2006","19/08/2006","20/09/2006","06/10/2006","7/11/2006","23/11/2006","09/12/2006","25/12/2006","10/01/2007","28/11/2008","04/03/2009","20/03/2009","23/05/2009","08/06/2009","12/09/2009","10/03/2011","26/03/2011","11/04/2011","29/05/2011","14/06/2011","16/07/2011","01/08/2011","17/08/2011","02/09/2011","18/09/2011","05/11/2011","23/12/2011","09/02/2012","25/02/2012","12/03/2012","13/04/2012","29/04/2012","16/06/2012","02/07/2012","03/08/2012","19/08/2012","04/09/2012","20/09/2012","07/11/2012","23/11/2012","10/01/2013","26/01/2013","11/02/2013","15/03/2013","31/03/2013","16/04/2013","19/06/2013","05/07/2013","06/08/2013","22/08/2013","23/09/2013","09/10/2013","29/01/2014","02/03/2014","19/04/2014","06/06/2014","24/07/2014","09/08/2014","25/08/2014","26/09/2014","12/10/2014","29/11/2014","31/12/2014","19/01/2016"), "%d/%m/%Y")] <- "yes"
 Data_P3$nahause[Data_P3$naha_include == "no"] <- 0
 Data_P3$comha <- Data_P3$inha + Data_P3$naha
+Data_P3$propin <- Data_P3$comha/148.95*100
 ```
 
 double line plot for peripheral wetland 3 with different axes using par and base R plot.
@@ -198,6 +236,24 @@ mtext(side = 4, line = 3, 'Daily rainfall (mm)')
 #since no occasions on which we would add in the naha data, the original inha data is used
 Data_P4 <- Data[Data$site == "Peripheral 4", ]
 Data_P4$date <- as.Date(Data_P4$date, "%Y-%m-%d")
+Data_P4$propin <- Data_P4$inha/214.38*100
+```
+
+### Calculations and Graphs Peripheral wetland 5
+```{r}
+#extract data for peripheral wetland 5
+Data_P5 <- Data[Data$site == "Peripheral 5", ]
+#work out proportion of naha against inundated ha for examining 
+Data_P5$propnaha <- Data_P5$naha/Data_P5$inha*100
+Data_P5$date <- as.Date(Data_P5$date, "%Y-%m-%d")
+Data_P5$nahause <- Data_P5$naha
+Data_P5$naha_include <- "no"
+write.csv(Data_P5, "Data_P5.csv")
+#change naha_include to 'yes' for selected dates
+Data_P5$naha_include[Data_P5$date %in% as.Date(c("26/07/2003","27/08/2003","26/06/2004","13/08/2004","13/04/2006","10/03/2011","26/03/2011","11/04/2011","29/05/2011","14/06/2011","16/07/2011","1/08/2011","17/08/2011","2/09/2011","18/09/2011","15/03/2013","31/03/2013","16/04/2013","12/12/2013","2/03/2014","19/04/2014","21/05/2014"), "%d/%m/%Y")] <- "yes"
+Data_P5$nahause[Data_P5$naha_include == "no"] <- 0
+Data_P5$comha <- Data_P5$inha + Data_P5$naha
+Data_P5$propin <- Data_P5$comha/328.5*100
 ```
 
 double line plot with different axes using par and base R plot.
@@ -218,15 +274,23 @@ mtext(side = 4, line = 3, 'Daily rainfall (mm)')
 
 #create 3 ggplots - one for each rainfall station and then print using grid.arrange
 MLC <- ggplot () +
-  geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("Area Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Central area of main lake") + theme(plot.title = element_text(size = 9))
+  geom_line(data = Data_MLC, aes(x = date, y = propin), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Central area of main lake") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
 MLW <- ggplot () +
-  geom_line(data = Data_MLW, aes(x = date, y = comha), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("Area Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Western area of main lake") + theme(plot.title = element_text(size = 9))
+  geom_line(data = Data_MLW, aes(x = date, y = propin), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Western area of main lake") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
+MLE <- ggplot () +
+  geom_line(data = Data_MLE, aes(x = date, y = propin), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Western area of main lake") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
+P1 <- ggplot () +
+  geom_line(data = Data_P1, aes(x = date, y = propin), color = "orange", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9))+ labs(title = "Peripheral wetland 1") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
+P2 <-  ggplot () +
+  geom_line(data = Data_P2, aes(x = date, y = propin), color = "black", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9))+ labs(title = "Peripheral wetland 2") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
 P3 <- ggplot () +
-  geom_line(data = Data_P3, aes(x = date, y = comha), color = "red", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("Area Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9))+ labs(title = "Peripheral wetland 3") + theme(plot.title = element_text(size = 9))
+  geom_line(data = Data_P3, aes(x = date, y = propin), color = "red", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9))+ labs(title = "Peripheral wetland 3") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
 P4 <- ggplot () +
-  geom_line(data = Data_P4, aes(x = date, y = inha), color = "green", size = 0.5) + ylab("Area Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Peripheral wetland 4 on dune") + theme(plot.title = element_text(size = 9))
+  geom_line(data = Data_P4, aes(x = date, y = propin), color = "green", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Peripheral wetland 4 on dune") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
+P5 <- ggplot () +
+  geom_line(data = Data_P5, aes(x = date, y = propin), color = "purple", size = 0.5) + ylab("% Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Peripheral wetland 5") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
 #arrange all three plots together
-grid.arrange(MLC, MLW, P3, P4, ncol=1)
+grid.arrange(MLC, MLW, MLE, P1, P2, P3, P4, P5, ncol=1)
 ```
 
 
