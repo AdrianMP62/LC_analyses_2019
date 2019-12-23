@@ -4,6 +4,7 @@ author: "Adrian Pinder"
 date: "22/11/2019"
 output:
   html_document: 
+    fig_caption: yes
     toc: yes
 editor_options:
   chunk_output_type: console
@@ -14,7 +15,7 @@ Date and time: `r Sys.time()`
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(out.width='1.0\\linewidth')
+#knitr::opts_chunk$set(out.width='1.0\\linewidth')
 ```
 
 ```{r include=FALSE}
@@ -28,14 +29,15 @@ library(grid)
 library(lattice)
 ```
 
-####Data are remote sensed water presence data including variables inha (inundated hectares) and naha (not assessable hectares - where there are blank lines across the wetland polygon). These naha areas are only added to the inha (to give a new column comha) where they are entirely across inha areas. Where they span both inha and dry areas they are not used. Code below creates files for each wetland polygon for assessment (outside R) of which dates to use the naha data. Rainfall data is from Bureau of meteorology
+####Data are remote sensed water presence, including variables inha (inundated hectares) and naha (not assessable hectares - where there are blank lines across the wetland polygon). naha areas are only added to the inha (to give a new column comha) where they are entirely across inha areas. Where they span both inha and dry areas (drha) they are not used. Code below creates files for each wetland polygon (site) for assessment (outside R) of which dates to use the naha data. Rainfall data is from Bureau of Meteorology.
 
-###Read in inundation and rainfall data
+Remote sensed inundated areas from from Bart Huntley (DBCA Remote Sensing and Spatial Analysis)
 
+###Import inundation and rainfall data
 ```{r}
-#read the raw inundation data for all wetland polygons from Bart Huntley (DBCA Remote Sensing and Spatial Analysis).
+#read raw inundation data for all wetland polygons
 Data <- read.csv("Carnegie inundation data.csv")
-#Load daily rainfall data from BoM for carnegie Station
+#Load daily rainfall data from BoM for Carnegie Station
 Rainfall.Carn <- read.csv("Carnegie rainfall.csv")
 Rainfall.Carn$Date <- as.Date(Rainfall.Carn$Date, "%d/%m/%Y")
 #Load daily rainfall data from BoM for Prenti Station
@@ -44,12 +46,11 @@ Rainfall.Pren$Date <- as.Date(Rainfall.Pren$Date, "%d/%m/%Y")
 ```
 
 
-### Produce rainfall plots
+###Produce rainfall plots
 ```{r}
 #combined Carnegie, Prenti and Wongawol rainfall - graphs and correlations
 Comb_Rain <- read.csv("Combined rainfall.csv")
 Comb_Rain$Date <- as.Date(Comb_Rain$Date, "%d/%m/%Y")
-
 #create 3 ggplots - one for each rainfall station
 RC <- ggplot () +
   geom_line(data = Comb_Rain, aes(x = Date, y = Carnegie.Rainfall), color = "blue", size = 0.5) + ylim(0,120) + theme(axis.title.x = element_blank())
@@ -270,7 +271,7 @@ mtext(side = 4, line = 3, 'Daily rainfall (mm)')
 ```
 
 #create grid of three inundation plots
-```{r}
+```{r, fig.width=10, fig.height=20}
 
 #create 3 ggplots - one for each rainfall station and then print using grid.arrange
 MLC <- ggplot () +
@@ -278,7 +279,7 @@ MLC <- ggplot () +
 MLW <- ggplot () +
   geom_line(data = Data_MLW, aes(x = date, y = propin), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Western area of main lake") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
 MLE <- ggplot () +
-  geom_line(data = Data_MLE, aes(x = date, y = propin), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Western area of main lake") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
+  geom_line(data = Data_MLE, aes(x = date, y = propin), color = "blue", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated")  + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9)) + labs(title = "Eastern area of main lake") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
 P1 <- ggplot () +
   geom_line(data = Data_P1, aes(x = date, y = propin), color = "orange", size = 0.5) + theme(axis.title.x = element_blank()) + ylab("% Inundated") + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0), size=9))+ labs(title = "Peripheral wetland 1") + theme(plot.title = element_text(size = 9)) + scale_y_continuous(limits = c(0,100),  breaks = c(50, 100))
 P2 <-  ggplot () +
