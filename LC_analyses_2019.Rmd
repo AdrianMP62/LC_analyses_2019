@@ -27,6 +27,7 @@ library(ggplot2)
 library(gridExtra)
 library(grid)
 library(lattice)
+library(scales)
 ```
 
 ####Data are remote sensed water presence, including variables inha (inundated hectares) and naha (not assessable hectares - where there are blank lines across the wetland polygon). naha areas are only added to the inha (to give a new column comha) where they are entirely across inha areas. Where they span both inha and dry areas (drha) they are not used. Code below creates files for each wetland polygon (site) for assessment (outside R) of which dates to use the naha data. Rainfall data is from Bureau of Meteorology.
@@ -36,30 +37,13 @@ Remote sensed inundated areas from from Bart Huntley (DBCA Remote Sensing and Sp
 ###Import inundation and rainfall data
 ```{r}
 #read raw inundation data for all wetland polygons
-Data <- read.csv("Carnegie inundation data.csv")
+Data <- read.csv("./Data/Carnegie inundation data.csv")
 #Load daily rainfall data from BoM for Carnegie Station
-Rainfall.Carn <- read.csv("Carnegie rainfall.csv")
+Rainfall.Carn <- read.csv("./Data/Carnegie rainfall.csv")
 Rainfall.Carn$Date <- as.Date(Rainfall.Carn$Date, "%d/%m/%Y")
 #Load daily rainfall data from BoM for Prenti Station
-Rainfall.Pren <- read.csv("Prenti rainfall.csv")
+Rainfall.Pren <- read.csv("./Data/Prenti rainfall.csv")
 Rainfall.Pren$Date <- as.Date(Rainfall.Pren$Date, "%d/%m/%Y")
-```
-
-
-###Produce rainfall plots
-```{r}
-#combined Carnegie, Prenti and Wongawol rainfall - graphs and correlations
-Comb_Rain <- read.csv("Combined rainfall.csv")
-Comb_Rain$Date <- as.Date(Comb_Rain$Date, "%d/%m/%Y")
-#create 3 ggplots - one for each rainfall station
-RC <- ggplot () +
-  geom_line(data = Comb_Rain, aes(x = Date, y = Carnegie.Rainfall), color = "blue", size = 0.5) + ylim(0,120) + theme(axis.title.x = element_blank())
-RP <- ggplot () +
-  geom_line(data = Comb_Rain, aes(x = Date, y = Prenti.Rainfall), color = "red", size = 0.5) + ylim(0,120) + theme(axis.title.x = element_blank())
-RW <- ggplot () +
-  geom_line(data = Comb_Rain, aes(x = Date, y = Wongawol.Rainfall), color = "green", size = 0.5) + ylim(0,120)
-#arrange all three plots together
-grid.arrange(RC, RP, RW, ncol=1)
 ```
 
 ### Undertake correlations between rainfall stations
@@ -90,11 +74,47 @@ Data_MLC$propin <- Data_MLC$comha/32250.42*100
 write.csv(Data_MLC, "Data_MLC.csv")
 ```
 
+###Produce rainfall plots
+```{r}
+#combined Carnegie, Prenti and Wongawol rainfall - graphs and correlations
+Comb_Rain <- read.csv("./Data/Combined rainfall.csv")
+Comb_Rain$Date <- as.Date(Comb_Rain$Date, "%d/%m/%Y")
+#create 3 ggplots - one for each rainfall station
+RC <- ggplot () +
+  geom_line(data = Comb_Rain, aes(x = Date, y = Carnegie.Rainfall), color = "blue", size = 0.5) + ylim(0,120) + theme(axis.title.x = element_blank())
+RP <- ggplot () +
+  geom_line(data = Comb_Rain, aes(x = Date, y = Prenti.Rainfall), color = "red", size = 0.5) + ylim(0,120) + theme(axis.title.x = element_blank())
+RW <- ggplot () +
+  geom_line(data = Comb_Rain, aes(x = Date, y = Wongawol.Rainfall), color = "green", size = 0.5) + ylim(0,120)
+#arrange all three plots together
+grid.arrange(RC, RP, RW, ncol=1)
+```
+
+##rainfall plots with central lake area rainfall for just 1999
+```{r}
+RC1999 <- ggplot () +
+  geom_line(data = Comb_Rain, aes(x = Date, y = Carnegie.Rainfall), color = "blue", size = 0.5) + ylim(0,120) + theme(axis.title.x = element_blank()) + scale_x_date(date_breaks = "1 month", labels=date_format("%b"), limits = as.Date(c('1999-01-01','1999-12-01')))
+RW1999 <- ggplot () +
+  geom_line(data = Comb_Rain, aes(x = Date, y = Wongawol.Rainfall), color = "green", size = 0.5) + ylim(0,120) + scale_x_date(date_breaks = "1 month", labels=date_format("%b"), limits = as.Date(c('1999-01-01','1999-12-01')))
+MLCarea1999 <- ggplot() +
+  geom_line(data = Data_MLC, aes(x = date, y = propin), color = "red", size = 0.5) + ylim(0,120) + theme(axis.title.x = element_blank()) + scale_x_date(date_breaks = "1 month", labels=date_format("%b"), limits = as.Date(c('1999-01-01','1999-12-01')))
+grid.arrange(RC1999, RW1999, MLCarea1999, ncol=1)
+```
+
+
+
 double line plot with rainfall x 150 so can see on same scale as inundated hectares
 ```{r}
 ggplot () +
-  geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) #+
-  #geom_line(data = Rainfall.Carn, aes(x = Date, y = Rainfall*150), color = "red", size = 1, alpha=0.5)
+  geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) +
+  geom_line(data = Rainfall.Carn, aes(x = Date, y = Rainfall*150), color = "red", size = 1, alpha=0.5) + scale_x_date(limits = as.Date(c('1999-01-01','1999-12-01')))
+```
+
+double line plot with rainfall x 150 so can see on same scale as inundated hectares (restrcited to 1999)
+```{r}
+ggplot () +
+  geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) +
+  geom_line(data = Rainfall.Carn, aes(x = Date, y = Rainfall*150), color = "red", size = 1, alpha=0.5) + scale_x_date(limits = as.Date(c('1999-01-01','1999-12-01')))
 ```
 
 double line plot with different axes using par and base R plot.
