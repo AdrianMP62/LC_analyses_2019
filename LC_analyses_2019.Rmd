@@ -46,17 +46,6 @@ Rainfall.Pren <- read.csv("./Data/Prenti rainfall.csv")
 Rainfall.Pren$Date <- as.Date(Rainfall.Pren$Date, "%d/%m/%Y")
 ```
 
-### Undertake correlations between rainfall stations
-```{r}
-#Spearman correlations
-#omit dates with NA values for any station
-Comb_Rain_3val <- na.omit(Comb_Rain)
-#calculate spearman correlations
-cor(Comb_Rain_3val$Carnegie.Rainfall, Comb_Rain_3val$Prenti.Rainfall, method = "spearman")
-cor(Comb_Rain_3val$Prenti.Rainfall, Comb_Rain_3val$Wongawol.Rainfall, method = "spearman")
-cor(Comb_Rain_3val$Carnegie.Rainfall, Comb_Rain_3val$Wongawol.Rainfall, method = "spearman")
-```
-
 ### Calculations and Graphs for central lake area
 ```{r}
 #extract main lake central data
@@ -101,13 +90,22 @@ MLCarea1999 <- ggplot() +
 grid.arrange(RC1999, RW1999, MLCarea1999, ncol=1)
 ```
 
-
+### Undertake correlations between rainfall stations
+```{r}
+#Spearman correlations
+#omit dates with NA values for any station
+Comb_Rain_3val <- na.omit(Comb_Rain)
+#calculate spearman correlations
+cor(Comb_Rain_3val$Carnegie.Rainfall, Comb_Rain_3val$Prenti.Rainfall, method = "spearman")
+cor(Comb_Rain_3val$Prenti.Rainfall, Comb_Rain_3val$Wongawol.Rainfall, method = "spearman")
+cor(Comb_Rain_3val$Carnegie.Rainfall, Comb_Rain_3val$Wongawol.Rainfall, method = "spearman")
+```
 
 double line plot with rainfall x 150 so can see on same scale as inundated hectares
 ```{r}
 ggplot () +
   geom_line(data = Data_MLC, aes(x = date, y = comha), color = "blue", size = 0.5) +
-  geom_line(data = Rainfall.Carn, aes(x = Date, y = Rainfall*150), color = "red", size = 1, alpha=0.5) + scale_x_date(limits = as.Date(c('1999-01-01','1999-12-01')))
+  geom_line(data = Rainfall.Carn, aes(x = Date, y = Rainfall*150), color = "red", size = 1, alpha=0.5)
 ```
 
 double line plot with rainfall x 150 so can see on same scale as inundated hectares (restrcited to 1999)
