@@ -67,14 +67,14 @@ write.csv(Data_MLC, "Data_MLC.csv")
 ```{r}
 #combined Carnegie, Prenti and Wongawol rainfall - graphs and correlations
 Comb_Rain <- read.csv("./Data/Combined rainfall.csv")
-Comb_Rain$Date <- as.Date(Comb_Rain$Date, "%d/%m/%y")
+Comb_Rain$Date <- as.Date(Comb_Rain$Date, "%d/%m/%Y")
 #create 3 ggplots - one for each rainfall station
 RC <- ggplot () +
-  geom_line(data = Comb_Rain, aes(x = Date, y = Carnegie.Rainfall), color = "blue", size = 0.5) + ylim(0,150) + theme(axis.title.x = element_blank())
+  geom_line(data = Comb_Rain, aes(x = Date, y = Carnegie.Rainfall), color = "blue", size = 0.5) + ylim(0,300) + theme(axis.title.x = element_blank())
 RP <- ggplot () +
-  geom_line(data = Comb_Rain, aes(x = Date, y = Prenti.Rainfall), color = "red", size = 0.5) + ylim(0,150) + theme(axis.title.x = element_blank())
+  geom_line(data = Comb_Rain, aes(x = Date, y = Prenti.Rainfall), color = "red", size = 0.5) + ylim(0,300) + theme(axis.title.x = element_blank())
 RW <- ggplot () +
-  geom_line(data = Comb_Rain, aes(x = Date, y = Wongawol.Rainfall), color = "green", size = 0.5) + ylim(0,150)
+  geom_line(data = Comb_Rain, aes(x = Date, y = Wongawol.Rainfall), color = "green", size = 0.5) + ylim(0,300)
 #arrange all three plots together
 grid.arrange(RC, RP, RW, ncol=1)
 ```
